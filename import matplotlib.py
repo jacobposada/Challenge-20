@@ -19,6 +19,6 @@ for plant in plantData:
 print (sepal_length) 
 
 # graph the data to detect any initial patterns 
-fig, simple_chart = plt.subplots() 
-simple_chart.plot(plantData) 
+simple_chart = plt.scatter(sepal_length, petal_length) 
+plt.show() 
 
