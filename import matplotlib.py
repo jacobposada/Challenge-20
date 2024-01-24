@@ -24,7 +24,7 @@ simple_chart = plt.scatter(petal_length, sepal_length)
 # plt.show() 
 
 # create list of tuples with data 
-plant_data = zip(petal_length, sepal_length) 
+plant_data = zip(id, petal_length, sepal_length) 
 
 # range of variables 
 petal_range = (min(petal_length), max(petal_length)) 
@@ -45,7 +45,8 @@ class Centroid:
 
 class Point: 
 
-    def __init__(self, petal_length, sepal_length): 
+    def __init__(self, id, petal_length, sepal_length): 
+        self.id = id 
         self.petal_length = petal_length 
         self.sepal_length = sepal_length 
 
@@ -53,14 +54,17 @@ class Point:
     def closest_dist(self, centroids): 
         dist = []
         for centroid in centroids: 
-            distance = np.sqrt(sum(sum(self.petal_length, centroid.petal_length)**2), sum(self.sepal_length, centroid.sepal_length)**2)
-            dist.append(distance) 
+            #dist_from_centroid = np.sqrt
+            petal_len = (self.petal_length - centroid.petal_length)**2 
+            sepal_len = (self.sepal_length - centroid.sepal_length)**2 
+            dist_from_centroid = np.sqrt(petal_len + sepal_len) 
+            dist.append(dist_from_centroid) 
+        # the index will signify which centroid is closest 
         return dist.index(min(dist)) 
     
-
-# append the points to different lists based on the centroid (using identifier) 
-# change centroid to the average of the points' features 
-# repeat until no changes happen in the list 
+    def __str__(self): 
+        return f"Point {self.id} has petal length {self.petal_length} and sepal length {self.sepal_length}"
+    
 
 ## start with two random centroids 
 
@@ -74,5 +78,16 @@ centroids.append(Centroid('B'))
 ## determine which centroid is closest to each point 
 
 # create points 
-#/ for plant in plant_data: 
-    
+points = [] 
+for plant in plant_data: 
+    points.append(Point(plant[0], plant[1], plant[2])) 
+
+# append the points to different lists based on the centroid (using identifier) 
+sorted_points = [[] for entry in range(len(centroids))]
+for point in points: 
+   index = point.closest_dist(centroids) 
+   sorted_points[index].append(point.id)
+
+print (sorted_points[0]) 
+# change centroid to the average of the points' features 
+# repeat until no changes happen in the list 
