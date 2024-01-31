@@ -31,6 +31,41 @@ plant_data = zip(id, petal_length, sepal_length)
 petal_range = (min(petal_length), max(petal_length)) 
 sepal_range = (min(sepal_length), max(sepal_length)) 
 
+class KMeans: 
+    def __init__(self, k=3, max_iters=1000): 
+        self.k = k 
+        self.max_iters = max_iters 
+
+    def closest_dist(self, centroids): 
+        dist = []
+        for centroid in centroids: 
+            #dist_from_centroid = np.sqrt
+            petal_len = (self.petal_length - centroid.petal_length)**2 
+            sepal_len = (self.sepal_length - centroid.sepal_length)**2 
+            dist_from_centroid = np.sqrt(petal_len + sepal_len) 
+            dist.append(dist_from_centroid) 
+        # the index will signify which centroid is closest 
+        return dist.index(min(dist)) 
+
+    def fit(self, data): 
+        self.centroids = {} 
+        # Initialize k centroids by randomly selecting a point from the dataset 
+        random_indices = np.random.choice(plant_data, self.k, replace=False)
+
+        for i in range(self.k): 
+            self.centroids[i] = data[random_indices[i]] 
+
+        for j in range(self.max_iters): 
+            self.classifications = {} 
+
+            for k in range(self.k): 
+                self.classifications[i] = [] 
+
+                # Assign data points to nearest centroid 
+                for point in data: 
+                    
+
+
 class Centroid: 
 
     def __init__(self, name): 
