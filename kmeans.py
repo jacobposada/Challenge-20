@@ -24,11 +24,10 @@ simple_chart = plt.scatter(petal_length, sepal_length)
 
 # create list of lists with relevant data, check the format 
 plant_data = [[x,y,z] for x,y,z in zip(id, sepal_length, petal_length)]
-
 # print (plant_data) 
 
 class KMeans: 
-    def __init__(self, k=3, max_iters=100): 
+    def __init__(self, k=3, max_iters=200): 
         self.k = k 
         self.max_iters = max_iters 
 
@@ -51,31 +50,31 @@ class KMeans:
         random_indices = random.sample(range(len(dataset)), self.k)
         random_points = [dataset[i][1:] for i in random_indices]
         self.centroids = [random_points[i] for i in range(self.k)] 
-        print(self.centroids) 
+        print("Initial centroids:", self.centroids) 
 
         # Iterate at most max_iters times 
         for i in range(self.max_iters): 
-            centroid_assignments = {} 
+            self.centroid_assignments = {} 
 
             for k in range(self.k): 
-                centroid_assignments[k] = [] 
+                self.centroid_assignments[k] = [] 
 
             # Assign data points to nearest centroid 
             for point in dataset: 
                 assigned_centroid = self.closest_dist(point, self.centroids) 
-                centroid_assignments[assigned_centroid].append(point) 
+                self.centroid_assignments[assigned_centroid].append(point) 
             
             # Store current centroids as previous for the next iteration 
             prev_centroids = self.centroids 
 
             # Update centroids 
-            for assignment in centroid_assignments: 
+            for assignment in self.centroid_assignments: 
                 # print(centroid_assignments[assignment]) 
 
                 # Find average values of clusters 
-                cluster_petal_lengths = [sublist[1] for sublist in centroid_assignments[assignment]] 
+                cluster_petal_lengths = [sublist[1] for sublist in self.centroid_assignments[assignment]] 
                 avg_p_length = sum(cluster_petal_lengths) / len(cluster_petal_lengths) 
-                cluster_sepal_lengths = [sublist[2] for sublist in centroid_assignments[assignment]] 
+                cluster_sepal_lengths = [sublist[2] for sublist in self.centroid_assignments[assignment]] 
                 avg_s_length = sum(cluster_sepal_lengths) / len(cluster_sepal_lengths) 
                 
                 # Assign new values to centroids 
@@ -98,9 +97,10 @@ class KMeans:
                     optimized = False 
                     break 
             if optimized: 
+                print ("First cluster:", self.centroid_assignments[0])
                 break 
             
-        print (self.centroids)        
+        print ("Final centroids:", self.centroids) 
 
 # Create KMeans object to utilize dataset in 
 plant_kmeans = KMeans() 
